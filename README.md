@@ -6,8 +6,8 @@
 MexLib - это бот-библиотекарь для студенческих групп ФИИТа МехМата ЮФУ, который облегчит поиск и использование учебных материалов.
 
 Авторы:
-@forib
-@okrieso
-@federiton_san
-@yaprogromist
-@mapsalpon
+vk.com/forib
+vk.com/okrieso
+vk.com/federiton_san
+vk.com/yaprogromist
+vk.com/mapsalpon

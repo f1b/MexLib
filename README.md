@@ -7,7 +7,11 @@ MexLib - это бот-библиотекарь для студенческих 
 
 Авторы:
 vk.com/forib
+
 vk.com/okrieso
+
 vk.com/federiton_san
+
 vk.com/yaprogromist
+
 vk.com/mapsalpon

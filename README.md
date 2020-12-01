@@ -7,15 +7,8 @@ MexLib - это бот-библиотекарь для студенческих 
 
 Авторы:
 
-[Олег / forib](http://vk.com/forib "Олег")
-[Олег / forib](http://vk.com/forib "Олег")
-[Олег / forib](http://vk.com/forib "Олег")
-[Олег / forib](http://vk.com/forib "Олег")
-[Олег / forib](http://vk.com/forib "Олег")
-vk.com/okrieso
-
-vk.com/federiton_san
-
-vk.com/yaprogromist
-
-vk.com/mapsalpon
+[Олег](http://vk.com/forib "Олег")
+[Альберт](http://vk.com/okrieso "Олег")
+[Фёдор](http://vk.com/federiton_san "Олег")
+[Симеон](http://vk.com/yaprogromist "Олег")
+[Максим](http://vk.com/mapsalpon "Олег")

@@ -6,9 +6,8 @@
 MexLib - это бот-библиотекарь для студенческих групп ФИИТа МехМата ЮФУ, который облегчит поиск и использование учебных материалов.
 
 Авторы:
-
-[Олег](http://vk.com/forib "Олег")
-[Альберт](http://vk.com/okrieso "Олег")
-[Фёдор](http://vk.com/federiton_san "Олег")
-[Симеон](http://vk.com/yaprogromist "Олег")
-[Максим](http://vk.com/mapsalpon "Олег")
+[Олег](http://vk.com/forib "1")
+[Альберт](http://vk.com/okrieso "2")
+[Фёдор](http://vk.com/federiton_san "3")
+[Симеон](http://vk.com/yaprogromist "4")
+[Максим](http://vk.com/mapsalpon "5")

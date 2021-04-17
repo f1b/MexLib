@@ -75,28 +75,13 @@ def GetDocsNamesByIDs(list_of_ids):
 def isDocInBase(doc_id, doc_name):
     try:
         if (docswork.IsInBase(doc_id)):
-            print(doc_id)
-            print(docswork.IsInBase(doc_id))
             return True
         elif (docswork.IsInBase(docswork.FindIDByName(doc_name)[0])):
-            print(doc_name)
-            print(docswork.FindIDByName(doc_name)[0])
             return True
         else:
-            print(doc_id)
-            print(doc_name)
-            print(docswork.IsInBase(doc_id))
-            print(docswork.FindIDByName(doc_name)[0])
             return False
     except Exception as ex:
         return False
-
-
-@bot_group.message_handler(bot_group.text_filter(("testdocs"), ignore_case=True))
-async def sender(event: bot.SimpleBotEvent):
-    msg_user_id = event.object.object.message.from_id
-
-    await event.answer(docswork.FindIDByName("АиГ Кряквин"))
 
 
 @bot_group.message_handler(bot_group.text_filter(("начать", "в меню"), ignore_case=True))

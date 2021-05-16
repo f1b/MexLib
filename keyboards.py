@@ -7,16 +7,21 @@ def keyboard_menu():
     kb = Keyboard(one_time=False)
     kb.add_text_button("Список доступных документов", ButtonColor.PRIMARY, payload={"command": "getstudentdocs"})
     kb.add_row()
-    kb.add_text_button("Изменить курс", ButtonColor.POSITIVE, payload={"command": "changeuserinfo"})
-    kb.add_text_button("Админ-панель", ButtonColor.NEGATIVE, payload={"command": "adminmenu"})
-    kb.add_row()
     kb.add_text_button("О боте", ButtonColor.SECONDARY, payload={"command": "about"})
     kb.add_text_button("Помощь", ButtonColor.SECONDARY, payload={"command": "help"})
     kb.add_text_button("О мне", ButtonColor.SECONDARY, payload={"command": "aboutme"})
     kb.add_row()
-    kb.add_text_button("Для проверяющих", ButtonColor.SECONDARY, payload={"command": "checkhelp"})
+    kb.add_text_button("Настройки", ButtonColor.POSITIVE, payload={"command": "settings"})
     return kb.get_keyboard()
 
+# Меню настроек
+def settings_menu():
+    kb = Keyboard(one_time=False)
+    kb.add_text_button("Изменить курс", ButtonColor.POSITIVE, payload={"command": "changeuserinfo"})
+    kb.add_text_button("Админ-панель", ButtonColor.NEGATIVE, payload={"command": "adminmenu"})
+    kb.add_row()
+    kb.add_text_button("В меню", ButtonColor.PRIMARY)
+    return kb.get_keyboard()
 
 # Генератор списка документов
 def keyboard_generator(buttons_list, buttons_per_page=4):
@@ -73,6 +78,8 @@ def keyboard_admin():
     kb.add_row()
     kb.add_text_button("Добавить теги", ButtonColor.SECONDARY, payload={"command": "addtags"})
     kb.add_text_button("Удалить теги", ButtonColor.SECONDARY, payload={"command": "deletetags"})
+    kb.add_row()
+    kb.add_text_button("Добавить администратора", ButtonColor.POSITIVE, payload={"command": "makeadmin"})
     kb.add_row()
     kb.add_text_button("В меню", ButtonColor.PRIMARY)
     return kb.get_keyboard()

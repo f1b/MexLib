@@ -1,3 +1,5 @@
+from random import randint
+
 from vkwave.bots import SimpleLongPollUserBot
 from vkwave.bots import SimpleLongPollBot
 from config import USER_TOKEN, BOT_TOKEN, GROUP_ID
@@ -82,7 +84,6 @@ def isDocInBase(doc_id, doc_name):
             return False
     except Exception as ex:
         return False
-
 
 @bot_group.message_handler(bot_group.text_filter(("начать", "в меню"), ignore_case=True))
 async def sender(event: bot.SimpleBotEvent):
@@ -288,6 +289,13 @@ async def sender(event: bot.SimpleBotEvent):
         'Хорошо, я удалил всю информацию о тебе. Нажми "Начать", чтобы снова указать курс и группу',
         keyboard=anskb.get_keyboard())
 
+@bot_group.message_handler(bot_group.payload_filter({"command": "settings"}))
+async def sender(event: bot.SimpleBotEvent):
+    await event.answer('Меню настроек', keyboard=keyboards.settings_menu())
+
+@bot_group.message_handler(bot_group.payload_filter({"command": "makeadmin"}))
+async def sender(event: bot.SimpleBotEvent):
+    await event.answer('Хорошо! Пришли мне ID человека, которого хочешь сделать администратором, со словами "Сделать администратором" \n \n Правила добавления: \n \n 1) Администратором можно сделать только того, кто уже зарегистрирован в боте. \n \n 2) ID - только цифровой. Его можно взять, например, в личном диалоге с пользователем, которого ты хочешь сделать администратором \n \n 3) Eсли возникли проблемы - не стесняйся нажимать на кнопку "Помощь"')
 
 @bot_group.message_handler(bot_group.payload_filter({"command": "about"}))
 async def sender(event: bot.SimpleBotEvent):
@@ -328,15 +336,34 @@ async def sender(event: bot.SimpleBotEvent):
         clients.UpdateMenuFlag(msg_user_id, 1)
 
 
-@bot_group.message_handler(bot.text_filter(("getcode"), ignore_case=True))
+@bot_group.message_handler(bot_group.text_contains_filter("сделать администратором"))
 async def sender(event: bot.SimpleBotEvent):
     msg_user_id = event.object.object.message.from_id
-    if (clients.GetUserRole(msg_user_id)[0] == 'admin'):
-        clients.UpdateRole(msg_user_id, "student")
-        await event.answer('Теперь ты студент!', keyboard=keyboards.keyboard_menu())
+    new_adm_id_temp = re.search(r'(\d+)(?!.*\d)', event.object.object.message.text)
+    if new_adm_id_temp:
+        new_adm_id = new_adm_id_temp.group()
     else:
-        clients.UpdateRole(msg_user_id, "admin")
-        await event.answer('Теперь ты администратор!', keyboard=keyboards.keyboard_menu())
+        new_adm_id = ''
+    if (clients.GetUserRole(msg_user_id)[0] == 'admin'):
+        if (len(new_adm_id) > 0):
+            if (clients.IsInBase(new_adm_id)):
+                if (clients.GetUserRole(new_adm_id)[0] == 'admin'):
+                    await event.answer('Этот пользователь уже администратор')
+                    await event.answer("\n \nГлавное меню", keyboard=keyboards.keyboard_menu())
+                else:
+                    clients.UpdateRole(new_adm_id, "admin")
+                    await event.answer('Ты сделал администратором пользователя с ID - ' + new_adm_id)
+                    await event.answer("\n \nГлавное меню", keyboard=keyboards.keyboard_menu())
+                    await bot_group.api_context.messages.send(peer_id = str(new_adm_id), random_id = str(randint(1,99999999)), message = f'Пользователь с ID - {msg_user_id} сделал тебя администратором')
+            else:
+                await event.answer('Пользователя с таким ID нет в базе данных. Возвращайся в меню')
+                await event.answer("\n \nГлавное меню", keyboard=keyboards.keyboard_menu())
+        else:
+            await event.answer('Я не понимаю, кого ты хочешь сделать администратором. Повтори, пожалуйста, запрос еще раз')
+            await event.answer("\n \nГлавное меню", keyboard=keyboards.keyboard_menu())
+    else:
+        await event.answer('Ты не администратор! Возвращайся в меню')
+        await event.answer("\n \nГлавное меню", keyboard=keyboards.keyboard_menu())
 
 
 @bot_group.message_handler(bot_group.payload_filter({"command": "adddoc"}))
@@ -345,7 +372,7 @@ async def sender(event: bot.SimpleBotEvent):
     if clients.GetMenuFlag(msg_user_id):
         if (clients.GetUserRole(msg_user_id)[0] == 'admin'):
             await event.answer(
-                'Хорошо! Пришли мне документ со словом "Добавить" \n \n Обязательные требования к документу: \n \n 1) Формат - только PDF или DOCX. Если старовер, то можешь загрузить DOC \n \n 1) Зайди в раздел "Файлы", найди там тот документ, который хочешь добавить, и поменяй его метку на "Учебный файл"(маленький карандаш справа от названия) \n \n 3) Само название должно быть не больше 30 символов в длину(будет больше - автоматически обрежется) и содержать в себе максимально краткое и понятное описание документа. ')
+                'Хорошо! Пришли мне документ со словом "Добавить" \n \n Обязательные требования к документу: \n \n 1) Формат - только PDF или DOCX. Если старовер, то можешь загрузить DOC \n \n 2) Зайди в раздел "Файлы", найди там тот документ, который хочешь добавить, и поменяй его метку на "Учебный файл"(маленький карандаш справа от названия) \n \n 3) Само название должно быть не больше 30 символов в длину(будет больше - автоматически обрежется) и содержать в себе максимально краткое и понятное описание документа. ')
             clients.UpdateDocsFlag(msg_user_id, 1)
             clients.UpdateMenuFlag(msg_user_id, 0)
         else:
@@ -1929,13 +1956,6 @@ async def sender(event: bot.SimpleBotEvent):
     await event.answer(
         f"Твой курс: {temp_user_course} курс\nТвоя группа: {temp_user_group} группа\nТвоя роль: {user_role}",
         keyboard=keyboards.keyboard_menu())
-
-
-@bot_group.message_handler(bot_group.payload_filter({"command": "checkhelp"}))
-async def sender(event: bot.SimpleBotEvent):
-    await event.answer("Для быстрой смены роли с администратора на студента и обратно используйте сообщение getcode",
-                       keyboard=keyboards.keyboard_menu())
-
 
 @bot_group.message_handler()
 async def sender(event: bot.SimpleBotEvent):
